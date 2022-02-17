@@ -7,6 +7,132 @@ use std::{
 };
 
 /// Time or duration in SI units.
+///
+/// # Examples
+///
+/// ## 1 Creation
+///
+/// Use `new` to create with a `f64`. Or you can convert a `f64`.
+/// Consider using `from` when converting a concrete `f64`,
+/// and `new` when creating from an temporary `f64` expression.
+///
+/// ```
+/// use min_timer::Sec;
+/// const A: f64 = 123.456;
+///
+/// assert_eq!(Sec::from(A), Sec::new(A));
+/// ```
+///
+/// ## 2 Standard Library Duration
+///
+/// You can convert to and from [std::time::Duration].
+///
+/// ```
+/// use min_timer::Sec;
+/// use std::time::Duration;
+/// const A: f64 = 123.456;
+///
+/// let dur = Duration::from_secs_f64(A);
+/// let sec = Sec::from(dur);
+///
+/// assert_eq!(Sec::from(A), sec);
+/// ```
+///
+/// ## 3 Addition & Subtraction
+///
+/// You can add or subtract only seconds from each other, not with a scalar `f64`.
+///
+/// ```
+/// use min_timer::Sec;
+/// const A: f64 = 123.456;
+/// const B: f64 = 666.420;
+///
+/// let a = Sec::from(A);
+/// let b = Sec::from(B);
+///
+/// assert_eq!(A, a.as_f64());
+/// assert_eq!(B, b.as_f64());
+/// assert_eq!(Sec::new(A + B), a + b);
+/// assert_eq!(Sec::new(A - B), a - b);
+/// assert_eq!(Sec::new(B - A), -(a - b));
+/// ```
+///
+/// ## 4 Multiplication & Division
+///
+/// You can only multiply or divide seconds with a scalar.
+/// You cannot multiply two seconds or divide a scalar to a second.
+///
+/// ```
+/// use min_timer::Sec;
+/// const A: f64 = 123.456;
+/// const B: f64 = 666.420;
+/// const C: f64 = 3.33;
+///
+/// let a = Sec::from(A);
+/// let b = Sec::from(B);
+///
+/// assert_eq!(Sec::new(A * C), a * C);
+/// assert_eq!(Sec::new(B / C), b / C);
+/// ```
+///
+/// ## 5 Assignment Operations
+///
+/// You can mutate in place as well.
+///
+/// ```
+/// use min_timer::Sec;
+/// const A: f64 = 123.456;
+/// const B: f64 = 666.420;
+/// const C: f64 = 3.33;
+///
+/// let a = Sec::new(A);
+/// let b = Sec::from(B);
+///
+/// let mut c = a;
+/// let mut d = a;
+/// let mut e = a;
+/// let mut f = b;
+/// c += b;
+/// d -= b;
+/// e *= C;
+/// f /= C;
+///
+/// assert_eq!(Sec::new(A + B), c);
+/// assert_eq!(Sec::new(A - B), d);
+/// assert_eq!(Sec::new(A * C), e);
+/// assert_eq!(Sec::new(B / C), f);
+/// ```
+///
+/// ## 6 Parsing & Formatting
+///
+/// You can parse a string like a `f64`.
+/// And you can format to a string with a " s" at the end.
+///
+/// ```
+/// use min_timer::Sec;
+/// const A: f64 = 123.456;
+///
+/// let g = format!("{}", A);
+/// let h: Sec = g.parse().unwrap();
+///
+/// assert_eq!(Sec::from(A), h);
+/// assert_eq!(format!("{} s", A), format!("{}", h));
+/// ```
+///
+/// ## 7 Constants
+///
+/// Multiples and submultiples of seconds from 10^-9 to 10^9.
+/// Furthermore; minutes, hours and days also exist.
+/// If you find a use case to these please share it with me!
+///
+/// ```
+/// use min_timer::Sec;
+///
+/// let duration = 50.0 * Sec::MILLI;
+/// let same = Sec::new(0.050);
+///
+/// assert_eq!(duration, same);
+/// ```
 #[derive(Debug, PartialEq, PartialOrd, Clone, Copy, Default)]
 pub struct Sec(f64);
 
@@ -150,88 +276,5 @@ impl FromStr for Sec {
 impl Display for Sec {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{} s", self.0)
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use std::time::Duration;
-
-    use crate::Sec;
-
-    #[test]
-    fn from_double() {
-        let double = 123.456;
-        let sec = Sec::from(double);
-        assert_eq!(double, sec.0);
-        let sec: Sec = double.into();
-        assert_eq!(double, sec.0);
-    }
-
-    #[test]
-    fn from_dur() {
-        const A: f64 = 1.000_45;
-        let dur = Duration::from_secs_f64(A);
-        let sec = Sec::from(dur);
-        assert_eq!(Sec::from(A), sec);
-    }
-
-    #[test]
-    fn into_dur() {
-        const A: f64 = 1.000_45;
-        let dur = Duration::from_secs_f64(A);
-        let sec = Sec::from(A);
-        assert_eq!(dur, sec.into());
-    }
-
-    #[test]
-    fn add_and_sub() {
-        const A: f64 = 5.0;
-        const B: f64 = 0.75;
-        let a = Sec::from(A);
-        let b = Sec::from(B);
-        assert_eq!(Sec::from(A + B), a + b);
-        assert_eq!(Sec::from(A - B), a - b);
-
-        let mut c = Sec::from(A);
-        let mut d = Sec::from(A);
-        c += b;
-        d -= b;
-        assert_eq!(Sec::from(A + B), c);
-        assert_eq!(Sec::from(A - B), d);
-    }
-
-    #[test]
-    fn mul_div() {
-        const A: f64 = 3.33;
-        const B: f64 = 11.11;
-        let a = Sec::from(A);
-        assert_eq!(Sec::from(A * B), a * B);
-        assert_eq!(Sec::from(A / B), a / B);
-
-        let mut b = Sec::from(A);
-        let mut c = Sec::from(A);
-        b *= B;
-        c /= B;
-        assert_eq!(Sec::from(A * B), b);
-        assert_eq!(Sec::from(A / B), c);
-    }
-
-    #[test]
-    fn neg() {
-        const A: f64 = 45.67;
-        const B: f64 = 66.66;
-        let a = Sec::new(A);
-        let b = Sec::new(B);
-        assert_eq!(Sec::new(B - A), -(a - b));
-    }
-
-    #[test]
-    fn from_str_fmt() {
-        const A: f64 = 64.45;
-        let a = format!("{}", A);
-        let b: Sec = a.parse().unwrap();
-        assert_eq!(Sec::from(A), b);
-        assert_eq!(format!("{} s", A), format!("{}", b));
     }
 }
