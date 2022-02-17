@@ -25,20 +25,12 @@ use std::ops::AddAssign;
 /// assert_eq!(4, stat.get_count());
 /// assert_eq!(2, stat.get_rate());
 /// ```
-pub struct Profile<'a, T, U>
-where
-    T: Now,
-    U: AddAssign<Sec>,
-{
+pub struct Profile<'a, T: Now, U: AddAssign<Sec>> {
     timer: Timer<'a, T>,
     acc: &'a mut U,
 }
 
-impl<'a, T, U> Profile<'a, T, U>
-where
-    T: Now,
-    U: AddAssign<Sec>,
-{
+impl<'a, T: Now, U: AddAssign<Sec>> Profile<'a, T, U> {
     /// Creates with a new timer.
     pub fn new(now: &'a T, acc: &'a mut U) -> Self {
         Self {
@@ -48,11 +40,7 @@ where
     }
 }
 
-impl<'a, T, U> Drop for Profile<'a, T, U>
-where
-    T: Now,
-    U: AddAssign<Sec>,
-{
+impl<'a, T: Now, U: AddAssign<Sec>> Drop for Profile<'a, T, U> {
     fn drop(&mut self) {
         *self.acc += self.timer.elapsed();
     }
