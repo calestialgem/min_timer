@@ -14,13 +14,13 @@ use std::ops::AddAssign;
 /// let mut stat = Stat::new();
 /// let now = Std::new();
 ///
-/// { let p = Profile::new(&now, &mut stat); subroutine(); }
-/// { let p = Profile::new(&now, &mut stat); subroutine(); }
+/// { let _ = Profile::new(&now, &mut stat); subroutine(); }
+/// { let _ = Profile::new(&now, &mut stat); subroutine(); }
 ///
 /// stat.refresh();
 ///
-/// { let p = Profile::new(&now, &mut stat); subroutine(); }
-/// { let p = Profile::new(&now, &mut stat); subroutine(); }
+/// { let _ = Profile::new(&now, &mut stat); subroutine(); }
+/// { let _ = Profile::new(&now, &mut stat); subroutine(); }
 ///
 /// assert_eq!(4, stat.get_count());
 /// assert_eq!(2, stat.get_rate());
