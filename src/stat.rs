@@ -37,6 +37,9 @@ impl Stat {
 
     /// Means the end of a cycle.
     /// Rate is calculated based on this.
+    ///
+    /// For example the render statistics in a game engine can be refreshed every second.
+    /// This way the `rate` will be the FPS counter.
     pub fn refresh(&mut self) {
         self.rate = 0;
     }
