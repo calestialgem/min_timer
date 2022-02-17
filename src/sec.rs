@@ -1,7 +1,7 @@
 use std::{
     fmt::Display,
     num::ParseFloatError,
-    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Sub, SubAssign},
+    ops::{Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Sub, SubAssign},
     str::FromStr,
     time::Duration,
 };
@@ -11,13 +11,34 @@ use std::{
 pub struct Sec(f64);
 
 impl Sec {
+    /// One giga second, Gs.
+    pub const GIGA: Sec = Sec::new(1e9);
+    /// One day, d.
+    pub const DAY: Sec = Sec::new(24.0 * Sec::HOUR.0);
+    /// One mega second, Ms.
+    pub const MEGA: Sec = Sec::new(1e6);
+    /// One hour, h.
+    pub const HOUR: Sec = Sec::new(60.0 * Sec::MINUTE.0);
+    /// One kilo second, ks.
+    pub const KILO: Sec = Sec::new(1e3);
+    /// One minute, min.
+    pub const MINUTE: Sec = Sec::new(60.0);
+    /// One second, s.
+    pub const ONE: Sec = Sec::new(1.0);
+    /// One milli second, ms.
+    pub const MILLI: Sec = Sec::new(1e-3);
+    /// One micro second, us.
+    pub const MICRO: Sec = Sec::new(1e-6);
+    /// One nano second, ns.
+    pub const NANO: Sec = Sec::new(1e-9);
+
     /// Creates from the given amount.
-    pub fn new(amt: f64) -> Self {
+    pub const fn new(amt: f64) -> Self {
         Self(amt)
     }
 
     /// Returns the amount.
-    pub fn as_f64(&self) -> f64 {
+    pub const fn as_f64(&self) -> f64 {
         self.0
     }
 }
@@ -82,6 +103,14 @@ impl Mul<f64> for Sec {
     }
 }
 
+impl Mul<Sec> for f64 {
+    type Output = Sec;
+
+    fn mul(self, rhs: Sec) -> Self::Output {
+        rhs * self
+    }
+}
+
 impl MulAssign<f64> for Sec {
     fn mul_assign(&mut self, rhs: f64) {
         self.0 *= rhs;
@@ -99,6 +128,14 @@ impl Div<f64> for Sec {
 impl DivAssign<f64> for Sec {
     fn div_assign(&mut self, rhs: f64) {
         self.0 /= rhs;
+    }
+}
+
+impl Neg for Sec {
+    type Output = Sec;
+
+    fn neg(self) -> Self::Output {
+        Self(-self.0)
     }
 }
 
@@ -178,6 +215,15 @@ mod tests {
         c /= B;
         assert_eq!(Sec::from(A * B), b);
         assert_eq!(Sec::from(A / B), c);
+    }
+
+    #[test]
+    fn neg() {
+        const A: f64 = 45.67;
+        const B: f64 = 66.66;
+        let a = Sec::new(A);
+        let b = Sec::new(B);
+        assert_eq!(Sec::new(B - A), -(a - b));
     }
 
     #[test]

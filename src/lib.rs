@@ -68,6 +68,17 @@ where
     }
 }
 
+impl<'a, T> Sub<Timer<'a, T>> for Sec
+where
+    T: Now,
+{
+    type Output = Sec;
+
+    fn sub(self, rhs: Timer<'a, T>) -> Self::Output {
+        self - rhs.elapsed()
+    }
+}
+
 impl<'a, T> PartialEq<Sec> for Timer<'a, T>
 where
     T: Now,
@@ -96,14 +107,14 @@ mod tests {
     fn waiting_loop() {
         let clk = Std::new();
         let timer = Timer::new(&clk);
-        let duration = Sec::from(0.05);
+        let duration = 5.0 * Sec::MILLI;
         let start = Instant::now(); // For limiting the waiting.
-        let cap: Duration = (duration + Sec::from(0.01)).into();
+        let cap = Duration::from(duration + Sec::MILLI);
         while timer < duration {
             if start.elapsed() > cap {
                 unreachable!("Passed {}!", duration);
             }
         }
-        assert!(timer - duration < Sec::new(1e-4_f64));
+        assert!(timer - duration < Sec::MICRO);
     }
 }
