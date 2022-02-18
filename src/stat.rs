@@ -12,15 +12,15 @@ use std::ops::AddAssign;
 ///
 /// s += Sec::new(3.0); // subroutine took 3 s
 ///
-/// assert_eq!(1, s.get_rate());
+/// assert_eq!(1, s.rate());
 ///
 /// s.refresh(); // a new cycle starts
 ///
 /// s += Sec::new(5.0); // subroutine took 5 s
 ///
-/// assert_eq!(Sec::new(4.0), s.find_average());
-/// assert_eq!(2, s.get_count());
-/// assert_eq!(1, s.get_rate());
+/// assert_eq!(Sec::new(4.0), s.dur());
+/// assert_eq!(2, s.count());
+/// assert_eq!(1, s.rate());
 /// ```
 #[derive(Debug, Clone, Copy)]
 pub struct Stat {

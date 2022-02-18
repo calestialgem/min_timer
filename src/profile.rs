@@ -22,8 +22,8 @@ use std::ops::AddAssign;
 /// { let _ = Profile::new(&now, &mut stat); subroutine(); }
 /// { let _ = Profile::new(&now, &mut stat); subroutine(); }
 ///
-/// assert_eq!(4, stat.get_count());
-/// assert_eq!(2, stat.get_rate());
+/// assert_eq!(4, stat.count());
+/// assert_eq!(2, stat.rate());
 /// ```
 pub struct Profile<'a, T: Now, U: AddAssign<Sec>> {
     timer: Timer<'a, T>,
