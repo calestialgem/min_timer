@@ -33,7 +33,7 @@ fn count(upto: u32) {
 
     while count < upto {
         if timer >= dur { // straight-forward checking,
-            timer -= dur; // flexible manuplation.
+            timer -= dur; // flexible manupilation.
             count += 1;
             println!("Counting {}...", count);
         }
@@ -45,7 +45,7 @@ fn count(upto: u32) {
 
 ## Profiler
 
-A small statistics and profiling functionality is also provided. This are all
+A small statistics and profiling functionality is also provided. These are all
 intended to be used in a real-time application.
 
 ```rust
@@ -172,7 +172,7 @@ impl<T: Now> Stt<T> for Ex {
         println!("Initialization done in {}!", timer);
     }
 
-    // Updating; heart provided for manuplation
+    // Updating; heart provided for manupilation
     fn update(&mut self, hrt: &mut Hrt<T>) {
         self.0 += 1e-1;
         if self.0 >= 1.0 {
@@ -180,7 +180,7 @@ impl<T: Now> Stt<T> for Ex {
         }
     }
 
-    // Profiling every second; heart provided for manuplation
+    // Profiling every second; heart provided for manupilation
     fn sec(&mut self, hrt: &mut Hrt<T>) {
         println!(
             "Tick Rate: {} Frame Rate: {}",
@@ -225,7 +225,7 @@ Why write this when there is the standard library?
 
 4. This crate provided a space where I could put more stuff about time, like
    profiling.
-5. Working with `f64`s is a lot more confortable; I saw this as I worked on the
+5. Working with `f64`s is a lot more comfortable; I saw this as I worked on the
    main loop.
 
 ---
