@@ -157,6 +157,8 @@ impl Sec {
     pub const MICRO: Sec = Sec::new(1e-6);
     /// One nano second, ns.
     pub const NANO: Sec = Sec::new(1e-9);
+    /// Zero seconds, 0 s.
+    pub const ZERO: Sec = Sec::new(0.0);
 
     /// Creates from the given amount.
     pub const fn new(amt: f64) -> Self {
