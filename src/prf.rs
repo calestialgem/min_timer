@@ -7,30 +7,30 @@ use std::ops::AddAssign;
 /// # Example
 ///
 /// ```
-/// use min_timer::{now::Std, Profile, Stat};
+/// use min_timer::{Std, Prf, Stat};
 ///
 /// fn subroutine() {}
 ///
 /// let mut stat = Stat::new();
 /// let now = Std::new();
 ///
-/// { let _ = Profile::new(&now, &mut stat); subroutine(); }
-/// { let _ = Profile::new(&now, &mut stat); subroutine(); }
+/// { let _ = Prf::new(&now, &mut stat); subroutine(); }
+/// { let _ = Prf::new(&now, &mut stat); subroutine(); }
 ///
 /// stat.refresh();
 ///
-/// { let _ = Profile::new(&now, &mut stat); subroutine(); }
-/// { let _ = Profile::new(&now, &mut stat); subroutine(); }
+/// { let _ = Prf::new(&now, &mut stat); subroutine(); }
+/// { let _ = Prf::new(&now, &mut stat); subroutine(); }
 ///
 /// assert_eq!(4, stat.count());
 /// assert_eq!(2, stat.rate());
 /// ```
-pub struct Profile<'a, T: Now, U: AddAssign<Sec>> {
+pub struct Prf<'a, T: Now, U: AddAssign<Sec>> {
     timer: Timer<'a, T>,
     acc: &'a mut U,
 }
 
-impl<'a, T: Now, U: AddAssign<Sec>> Profile<'a, T, U> {
+impl<'a, T: Now, U: AddAssign<Sec>> Prf<'a, T, U> {
     /// Creates with a new timer.
     pub fn new(now: &'a T, acc: &'a mut U) -> Self {
         Self {
@@ -40,7 +40,7 @@ impl<'a, T: Now, U: AddAssign<Sec>> Profile<'a, T, U> {
     }
 }
 
-impl<'a, T: Now, U: AddAssign<Sec>> Drop for Profile<'a, T, U> {
+impl<'a, T: Now, U: AddAssign<Sec>> Drop for Prf<'a, T, U> {
     fn drop(&mut self) {
         *self.acc += self.timer.elapsed();
     }

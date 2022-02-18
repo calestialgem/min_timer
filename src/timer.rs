@@ -10,7 +10,7 @@ use std::{
 ///
 /// ```
 /// use std::time::{Duration, Instant};
-/// use min_timer::{now::Std, Sec, Timer};
+/// use min_timer::{Std, Sec, Timer};
 ///
 /// let now = Std::new();
 /// let timer = Timer::new(&now);

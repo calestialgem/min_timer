@@ -1,13 +1,13 @@
-pub mod now;
-
+mod hrt;
+mod now;
+mod prf;
 mod sec;
-pub use sec::Sec;
-
 mod stat;
-pub use stat::Stat;
-
-mod profile;
-pub use profile::Profile;
-
 mod timer;
-pub use timer::Timer;
+
+pub use hrt::*;
+pub use now::*;
+pub use prf::*;
+pub use sec::*;
+pub use stat::*;
+pub use timer::*;
