@@ -27,7 +27,7 @@ fn count(upto: u32) {
 
     while count < upto {
         if timer >= dur { // straight-forward checking,
-            timer += dur; // flexible manuplation.
+            timer -= dur; // flexible manuplation.
             count += 1;
             println!("Counting {}...", count);
         }

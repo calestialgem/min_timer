@@ -1,5 +1,5 @@
 use crate::{now::Now, Sec};
-use std::ops::{Add, AddAssign, Sub};
+use std::ops::{Div, Mul, Sub, SubAssign};
 
 /// Finds time relative to the moment it is created.
 ///
@@ -56,22 +56,10 @@ impl<'a, T: Now> Timer<'a, T> {
     pub fn elapsed(&self) -> Sec {
         self.now.now() - self.start
     }
-}
 
-impl<'a, T: Now> Add<Sec> for Timer<'a, T> {
-    type Output = Self;
-
-    fn add(self, rhs: Sec) -> Self::Output {
-        Self {
-            start: self.start + rhs,
-            now: self.now,
-        }
-    }
-}
-
-impl<'a, T: Now> AddAssign<Sec> for Timer<'a, T> {
-    fn add_assign(&mut self, rhs: Sec) {
-        self.start += rhs;
+    /// Moves the timer forward to this instant.
+    pub fn refresh(&mut self) {
+        self.start = self.now.now();
     }
 }
 
@@ -88,6 +76,36 @@ impl<'a, T: Now> Sub<Timer<'a, T>> for Sec {
 
     fn sub(self, rhs: Timer<'a, T>) -> Self::Output {
         self - rhs.elapsed()
+    }
+}
+
+impl<'a, T: Now> SubAssign<Sec> for Timer<'a, T> {
+    fn sub_assign(&mut self, rhs: Sec) {
+        self.start += rhs;
+    }
+}
+
+impl<'a, T: Now> Mul<f64> for Timer<'a, T> {
+    type Output = Sec;
+
+    fn mul(self, rhs: f64) -> Self::Output {
+        self.elapsed() * rhs
+    }
+}
+
+impl<'a, T: Now> Mul<Timer<'a, T>> for f64 {
+    type Output = Sec;
+
+    fn mul(self, rhs: Timer<'a, T>) -> Self::Output {
+        rhs * self
+    }
+}
+
+impl<'a, T: Now> Div<f64> for Timer<'a, T> {
+    type Output = Sec;
+
+    fn div(self, rhs: f64) -> Self::Output {
+        self.elapsed() / rhs
     }
 }
 
