@@ -22,17 +22,50 @@ use std::ops::AddAssign;
 /// assert_eq!(2, s.get_count());
 /// assert_eq!(1, s.get_rate());
 /// ```
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Clone, Copy)]
 pub struct Stat {
     total: Sec,
     count: u64,
     rate: u64,
+    cycles: u64,
+}
+
+impl Default for Stat {
+    fn default() -> Self {
+        Self::new()
+    }
 }
 
 impl Stat {
     /// Creates clean.
     pub fn new() -> Self {
-        Self::default()
+        Self {
+            total: Sec::ZERO,
+            count: 0,
+            rate: 0,
+            cycles: 1,
+        }
+    }
+
+    /// Returns the total amount of times the subroutine was called.
+    pub fn count(&self) -> u64 {
+        self.count
+    }
+
+    /// Returns the amount of times the subroutine was called in the previous cycle.
+    /// The cycles end with a refresh call.
+    pub fn rate(&self) -> u64 {
+        self.rate
+    }
+
+    /// Finds the average duration of the subroutine.
+    pub fn dur(&self) -> Sec {
+        self.total / self.count as f64
+    }
+
+    /// Finds the average rate.
+    pub fn avg_rate(&self) -> f64 {
+        self.count as f64 / self.cycles as f64
     }
 
     /// Means the end of a cycle.
@@ -42,22 +75,7 @@ impl Stat {
     /// This way the `rate` will be the FPS counter.
     pub fn refresh(&mut self) {
         self.rate = 0;
-    }
-
-    /// Returns the average duration of the subroutine.
-    pub fn find_average(&self) -> Sec {
-        self.total / self.count as f64
-    }
-
-    /// Returns the total amount of times the subroutine was called.
-    pub fn get_count(&self) -> u64 {
-        self.count
-    }
-
-    /// Returns the amount of times the subroutine was called in the previous cycle.
-    /// The cycles end with a refresh call.
-    pub fn get_rate(&self) -> u64 {
-        self.rate
+        self.cycles += 1;
     }
 }
 
