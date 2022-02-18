@@ -1,5 +1,8 @@
 use crate::{now::Now, Sec};
-use std::ops::{Div, Mul, Sub, SubAssign};
+use std::{
+    fmt::Display,
+    ops::{Div, Mul, Sub, SubAssign},
+};
 
 /// Finds time relative to the moment it is created.
 ///
@@ -118,5 +121,11 @@ impl<'a, T: Now> PartialEq<Sec> for Timer<'a, T> {
 impl<'a, T: Now> PartialOrd<Sec> for Timer<'a, T> {
     fn partial_cmp(&self, other: &Sec) -> Option<std::cmp::Ordering> {
         self.elapsed().partial_cmp(other)
+    }
+}
+
+impl<'a, T: Now> Display for Timer<'a, T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.elapsed().fmt(f)
     }
 }
