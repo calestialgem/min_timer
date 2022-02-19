@@ -3,11 +3,14 @@ name = "min_timer"
 version = "0.3.0"
 authors = ["Cem Geçgel <gecgelcem@outlook.com>"]
 edition = "2021"
-description = "Simple f64 based duration and timer."
+description = "Simple f64 based duration and timer; moreover, a main loop implementation using it."
 readme = "README.md"
 repository = "https://github.com/Waistax/min_timer"
 license = "MIT OR Apache-2.0"
-keywords = ["timer", "profiler"]
+keywords = ["timer", "profiler", "main-loop"]
 categories = ["game-development"]
 
-[dependencies]
+[features]
+stat = []
+prf = ["stat"]
+hrt = ["prf"]

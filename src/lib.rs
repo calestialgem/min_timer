@@ -1,13 +1,21 @@
-mod hrt;
 mod now;
-mod prf;
 mod sec;
-mod stat;
 mod timer;
-
-pub use hrt::*;
 pub use now::*;
-pub use prf::*;
 pub use sec::*;
-pub use stat::*;
 pub use timer::*;
+
+#[cfg(feature = "stat")]
+mod stat;
+#[cfg(feature = "stat")]
+pub use stat::*;
+
+#[cfg(feature = "prf")]
+mod prf;
+#[cfg(feature = "prf")]
+pub use prf::*;
+
+#[cfg(feature = "hrt")]
+mod hrt;
+#[cfg(feature = "hrt")]
+pub use hrt::*;
